@@ -1,3 +1,12 @@
+## v1.4.2 (2024-09-11)
+
+### Fix
+
+- **client**: settings form tabs [close] #46
+- **backend**: remove idea with nickname in identity traits #45
+- **backend**: validate user nickname on register and assign as an ejabberd nickname #45
+- **backend**: register hooks handlers functions
+
 ## v1.4.1 (2024-09-09)
 
 ### Fix
