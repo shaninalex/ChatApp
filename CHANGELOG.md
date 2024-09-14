@@ -1,3 +1,14 @@
+## v1.4.3 (2024-09-14)
+
+### Fix
+
+- **client**: join room, show participants, show messages
+- **client**: get online rooms information and storing them in ngrx
+
+### Refactor
+
+- **client**: xmpp service and ngrx loadIdentity effect
+
 ## v1.4.2 (2024-09-11)
 
 ### Fix
