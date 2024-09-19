@@ -1,3 +1,12 @@
+## v1.4.4 (2024-09-19)
+
+### Fix
+
+- **client**: participants list and layout #55
+- **client**: message observables and sender form
+- **client**: chat status line
+- **client**: conversation layout #55
+
 ## v1.4.3 (2024-09-14)
 
 ### Fix
