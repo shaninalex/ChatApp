@@ -1,3 +1,10 @@
+## v1.4.5 (2024-09-21)
+
+### Fix
+
+- **backend**: generate unique nickname [close] #58
+- **backend**: add nickname to user traits #58
+
 ## v1.4.4 (2024-09-19)
 
 ### Fix
