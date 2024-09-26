@@ -1,3 +1,20 @@
+## v1.4.6 (2024-09-26)
+
+### Fix
+
+- **client**: new ui #62
+- **client**: (UI) chat menu #62
+- **client**: (UI) conversation list and area #62
+- **client**: change layout #62
+- **client**: Xmpp events distribution service and user subscription ( contacts ) component #62
+- **client**: refactor ui #62
+- **client**: do not show private messages in group chat
+- **backend**: set affiliation member for new user
+
+### Refactor
+
+- **client**: reduced folder nesting #62
+
 ## v1.4.5 (2024-09-21)
 
 ### Fix
