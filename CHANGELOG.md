@@ -1,3 +1,9 @@
+## v1.4.7 (2024-09-27)
+
+### Fix
+
+- **client**: rooms items in conversations list
+
 ## v1.4.6 (2024-09-26)
 
 ### Fix
