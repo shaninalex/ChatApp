@@ -1,3 +1,19 @@
+## v1.4.8 (2024-09-28)
+
+### Fix
+
+- **client**: import alias for store
+- **client**: sub rooms
+- **client**: pipes, libs and small components
+- **client**: chat menu
+- **client**: conversation area
+- **client**: conversations list
+- **client**: add mock data for store
+- use ngrx for ui
+- **client**: search conversations
+- **client**: select conversation [8695z26w9]
+- **client**: show user subscriptions in conversations list
+
 ## v1.4.7 (2024-09-27)
 
 ### Fix
