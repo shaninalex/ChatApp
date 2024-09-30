@@ -1,3 +1,15 @@
+## v1.4.9 (2024-09-30)
+
+### Fix
+
+- **client**: handle messages stream
+- **client**: get rooms with participants ( incorrect subscriptions chain )
+- **ui**: avatar component
+
+### Refactor
+
+- **client**: xmpp events service
+
 ## v1.4.8 (2024-09-28)
 
 ### Fix
