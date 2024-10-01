@@ -6,13 +6,9 @@ import { Room, RoomParticipant, RoomType } from "@lib";
 import { Store } from "@ngrx/store";
 import { ChatParticipantsAddMany, ChatRoomsAdd } from "@store/chat/actions";
 import { Disco, DiscoItem, DiscoItems, IQ, IQPayload } from "stanza/protocol";
-import { XmppService } from "../xmpp.service";
 import { selectRoomByJID } from "@store";
 import { map, Observable, of } from "rxjs";
-
-interface IQHandler {
-    run(): Observable<any>
-}
+import { IXmppEventHandler } from "./interface";
 
 // HANDLERS
 
@@ -22,17 +18,24 @@ interface IQHandler {
  * @class IQRosterHandler
  * @implements {IQHandler}
  */
-class IQRosterHandler implements IQHandler {
+class IQRosterHandler implements IXmppEventHandler {
     private store: Store;
     private iq: IQ;
 
-    constructor(store: Store, xmpp: XmppService, iq: IQ) {
+    constructor(store: Store, iq: IQ) {
         this.store = store;
         this.iq = iq;
     }
 
     run(): Observable<any> {
-        return of(null)
+        const items = this.iq.roster?.items;
+        console.log(this.iq);
+        if (!items) {
+            return of(null);
+        }
+        
+
+        return of(null);
     }
 }
 
@@ -44,11 +47,11 @@ class IQRosterHandler implements IQHandler {
  * @class IQPubSubHandler
  * @implements {IQHandler}
  */
-class IQPubSubHandler implements IQHandler {
+class IQPubSubHandler implements IXmppEventHandler {
     private store: Store;
     private iq: IQ;
 
-    constructor(store: Store, xmpp: XmppService, iq: IQ) {
+    constructor(store: Store, iq: IQ) {
         this.store = store;
         this.iq = iq;
     }
@@ -65,7 +68,7 @@ class IQPubSubHandler implements IQHandler {
  * @class IQDiscoHandler
  * @implements {IQHandler}
  */
-class IQDiscoHandler implements IQHandler {
+class IQDiscoHandler implements IXmppEventHandler {
     private store: Store;
     private iq: IQ;
 
@@ -134,11 +137,11 @@ class IQDiscoHandler implements IQHandler {
  * @class IQVCardHandler
  * @implements {IQHandler}
  */
-class IQVCardHandler implements IQHandler {
+class IQVCardHandler implements IXmppEventHandler {
     private store: Store;
     private iq: IQ;
 
-    constructor(store: Store, xmpp: XmppService, iq: IQ) {
+    constructor(store: Store, iq: IQ) {
         this.store = store;
         this.iq = iq;
     }
@@ -149,20 +152,20 @@ class IQVCardHandler implements IQHandler {
 }
 
 export class IQManager {
-    private processor: IQHandler
+    private processor: IXmppEventHandler
 
-    constructor(store: Store, xmpp: XmppService, iq: IQ) {
+    constructor(store: Store, iq: IQ) {
         if (iq.roster) {
-            this.processor = new IQRosterHandler(store, xmpp, iq)
+            this.processor = new IQRosterHandler(store, iq)
             return
         } else if (iq.pubsub) {
-            this.processor = new IQPubSubHandler(store, xmpp, iq)
+            this.processor = new IQPubSubHandler(store, iq)
             return
         } else if (iq.disco) {
             this.processor = new IQDiscoHandler(store, iq)
             return
         } else if (iq.vcard) {
-            this.processor = new IQVCardHandler(store, xmpp, iq)
+            this.processor = new IQVCardHandler(store, iq)
             return
         }
     }

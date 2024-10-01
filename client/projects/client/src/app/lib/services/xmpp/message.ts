@@ -4,10 +4,9 @@ import { Store } from "@ngrx/store";
 import { Message } from "@lib";
 import { MessageType } from "stanza/Constants";
 import { ChatMessageAdd } from "@store/chat/actions";
+import { IXmppEventHandler } from "./interface";
+import { Observable, of } from "rxjs";
 
-interface IMessageHandler {
-    run(): void
-}
 
 function createMessage(msg: ReceivedMessage): Message {
     const message: Message = {
@@ -39,46 +38,48 @@ function createMessage(msg: ReceivedMessage): Message {
     return message
 }
 
-class MessagePayloadHandler implements IMessageHandler {
+class MessagePayloadHandler implements IXmppEventHandler {
     private store: Store;
     private msg: ReceivedMessage;
 
-    constructor(store: Store, xmpp: XmppService, msg: ReceivedMessage) {
+    constructor(store: Store, msg: ReceivedMessage) {
         this.store = store;
         this.msg = msg;
     }
-    run() {
+    run(): Observable<any> {
         const message = createMessage(this.msg);
-        this.store.dispatch(ChatMessageAdd({ message }))
+        return of(this.store.dispatch(ChatMessageAdd({ message })))
     }
 }
 
-class MessageStateHandler implements IMessageHandler {
+class MessageStateHandler implements IXmppEventHandler {
     private store: Store;
     private msg: ReceivedMessage;
 
-    constructor(store: Store, xmpp: XmppService, msg: ReceivedMessage) {
+    constructor(store: Store, msg: ReceivedMessage) {
         this.store = store;
         this.msg = msg;
     }
-    run() { }
+    run(): Observable<any> { 
+        return of(null)
+    }
 }
 
 
 
 export class MessageManager {
-    private processor: IMessageHandler;
+    private processor: IXmppEventHandler;
 
-    constructor(store: Store, xmpp: XmppService, msg: ReceivedMessage) {
+    constructor(store: Store, msg: ReceivedMessage) {
         if (msg.body) {
-            this.processor = new MessagePayloadHandler(store, xmpp, msg);
+            this.processor = new MessagePayloadHandler(store, msg);
         } else {
-            this.processor = new MessageStateHandler(store, xmpp, msg);
+            this.processor = new MessageStateHandler(store, msg);
         }
     }
 
-    handle(): void {
-        if (!this.processor) return;
-        this.processor.run();
+    handle(): Observable<any> {
+        if (!this.processor) return of(null)
+        return this.processor.run();
     }
 }

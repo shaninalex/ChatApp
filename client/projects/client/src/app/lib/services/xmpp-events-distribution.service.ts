@@ -1,13 +1,12 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { AppState } from "@store/store";
 import { Store } from "@ngrx/store";
-import { filter, map, Observable, of, Subscription, switchMap, take, takeLast, tap } from "rxjs";
-import { ReceivedIQ, ReceivedMessage, ReceivedPresence } from "stanza/protocol";
+import { filter,  Subscription, switchMap, take, tap } from "rxjs";
+import { ReceivedIQ, ReceivedMessage } from "stanza/protocol";
 import { XmppService } from "./xmpp.service";
 import { IQManager } from "./xmpp/iq";
-import { ChatMessageAdd } from "@store/chat/actions";
-import { Message } from "@lib";
 import { MessageManager } from "./xmpp/message";
+import { PresenceManager } from "./xmpp/presence";
 
 
 /**
@@ -73,28 +72,26 @@ export class XmppEventsDistributionService implements OnDestroy {
         this.sub.add(
             xmpp.receivedIQ$.pipe(
                 switchMap((iq: ReceivedIQ, _) => {
-                    const ctx = new IQManager(this.store, xmpp, iq);
-                    return ctx.handle();    
+                    const ctx = new IQManager(this.store, iq);
+                    return ctx.handle();
                 })
             ).subscribe()
         );
 
         this.sub.add(
-            xmpp.receivedMessage$.subscribe(msg => {
-                const ctx = new MessageManager(this.store, xmpp, msg);
+            xmpp.receivedMessage$.pipe(
+                switchMap((msg: ReceivedMessage, _) => {
+                    const ctx = new MessageManager(this.store, msg);
+                    return ctx.handle();
+                })
+            ).subscribe()
+        );
+
+        this.sub.add(
+            xmpp.receivedPresence$.subscribe(presence => {
+                const ctx = new PresenceManager(this.store, presence);
                 ctx.handle();
             })
         );
-
     }
-
-    // this.subscription.add(
-    //     presence$.pipe(
-    //         map(presence => {
-    //             if (presence.type && SubscriptionTypes.includes(presence.type)) {
-    //                 this.store.dispatch(ChatSubscriptionAdd({ payload: presence }))
-    //             }
-    //         })
-    //     ).subscribe(),
-    // );
 }
